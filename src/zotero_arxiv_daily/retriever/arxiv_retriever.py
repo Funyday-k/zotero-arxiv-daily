@@ -9,6 +9,7 @@ import feedparser
 from urllib.request import urlretrieve
 from tqdm import tqdm
 import os
+import time
 from loguru import logger
 
 PDF_EXTRACT_TIMEOUT = 180
@@ -39,6 +40,8 @@ class ArxivRetriever(BaseRetriever):
         # Get full information of each paper from arxiv api
         bar = tqdm(total=len(all_paper_ids))
         for i in range(0,len(all_paper_ids),20):
+            if i > 0:
+                time.sleep(5)
             search = arxiv.Search(id_list=all_paper_ids[i:i+20])
             batch = list(client.results(search))
             bar.update(len(batch))
